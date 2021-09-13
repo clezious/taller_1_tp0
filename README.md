@@ -37,5 +37,12 @@ cuya salida al ejecutarlo resulta:
   sizeof() struct: 8
   sizeof() int + char : 5
 ```
-comprobando el comportamiento anteriormente dicho.
+comprobando el comportamiento anteriormente mencionado.
 ### e) Archivos estándar
+STDIN, STDOUT y STDERR son los canales de comunicación estandar al que tienen acceso los programas.
+- STDIN es utilizado para la entrada de datos al programa
+- STDOUT es utilizado para la salida de datos del programa
+- STDERR es utilizado para la salida de mensajes de error del programa
+
+Mediante el uso de los caracteres `>` y `<` puede *redirigirse* la salida de un programa hacia un archivo (`programa > archivo`), o la entrada de un programa desde un archivo (`programa < archivo`).  
+Por otra parte, el caracter *pipe* `|` permite conectar la salida de un proceso directamente con la entrada de otro, sin recurrir a archivos intermedios. Por ejemplo: `programa1 | programa2` ejecutará y conectará la salida del `programa1` a la entrada del `programa2` y ejecutará este último.
