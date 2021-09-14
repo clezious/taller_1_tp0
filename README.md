@@ -68,10 +68,26 @@ Analizando cada uno de los 11 errores reportados por orden de aparición, tenemo
 ### b) Errores de generación del ejecutable
 Se reciben también los siguientes errores:  
 ![Errores de Generación del Ejecutable](img/paso_1/errores_de_generacion.png)  
-Todos se tratan de errores de *compilación* debidos a la no inclusión del archivo `paso1_wordscounter.h`:
+Todos se tratan de errores de *compilación* debidos a la no inclusión del archivo `paso1_wordscounter.h` en `paso1_main.c`:
 - El primero se da porque no está definido el struct wordscounter_t
 - Los otros 4 se dan porque no están declaradas las funciones `wordscounter_create`, `wordscounter_process`, `wordscounter_get_words` y `wordscounter_destroy`
   
 ### c) Warnings
 En realidad, los últimos 4 errores del ítem anterior son warnings, pero como compilamos con el flag `-Werror`, entonces todos los Warnings son interpretados como errores.
 
+# Paso 2
+
+### a) Correcciones
+Utilizando el comando diff se observa que, basicamente, se corrigieron los errores de estilo que se detectaron en el paso anterior,
+y también los de compilación producidos por no haber incluido `paso1_wordscounter.h` en `paso1_main.c`.
+
+### b) Verificación de normas de programación
+Se comprueba que el cpplint ya no da errores:  
+![Errores de estilo](img/paso_2/errores_de_estilo.png)
+
+### c) Errores de generación del ejecutable
+Por otra parte, hay nuevos errores de generación del ejecutable:  
+![Errores de generación](img/paso_2/errores_de_generacion.png)  
+Nuevamente se tratan de errores de compilación por falta de definicionesn aunque esta vez en los archivos `paso2_wordscounter.c` y `paso2_wordscounter.h`, 
+que en este caso se solucionarían incluyendo los headers `stddef.h`, `stdio.h` y `stdlib.h` en los archivos correspondientes 
+(tal como se explica detalladamente en los errores de compilación obtenidos)
