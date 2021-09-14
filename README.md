@@ -2,9 +2,9 @@
 
 ### a) Capturas de pantalla de la ejecución del aplicativo
 - Ejecución sin Valgrind: <br><br> 
-  ![Ejecución sin Valgrind](img/paso_0/sin_valgrind.png)
+  ![Ejecución sin Valgrind](img/paso_0/sin_valgrind.png)  
 - Ejecución con Valgrind: <br><br> 
-  ![Ejecución con Valgrind](img/paso_0/con_valgrind.png)
+  ![Ejecución con Valgrind](img/paso_0/con_valgrind.png)  
 ### b) Valgrind
 [Valgrind](https://www.valgrind.org) es un programa Open Source que contiene herramientas para debuggear y hacer análisis de rendimiento de un programa en c/c++.  
 Es particularmente útil para detectar errores de memoria (con la herramienta memcheck).  
@@ -46,3 +46,32 @@ STDIN, STDOUT y STDERR son los canales de comunicación estandar al que tienen a
 
 Mediante el uso de los caracteres `>` y `<` puede *redirigirse* la salida de un programa hacia un archivo (`programa > archivo`), o la entrada de un programa desde un archivo (`programa < archivo`).  
 Por otra parte, el caracter *pipe* `|` permite conectar la salida de un proceso directamente con la entrada de otro, sin recurrir a archivos intermedios. Por ejemplo: `programa1 | programa2` ejecutará y conectará la salida del `programa1` a la entrada del `programa2` y ejecutará este último.
+
+# Paso 1
+
+### a) Problemas de Estilo
+Al subir el .zip al SERCOM se reciben los siguientes problemas de estilo:  
+![Problemas de Estilo](img/paso_1/errores_de_estilo.png)  
+Analizando cada uno de los 11 errores reportados por orden de aparición, tenemos:
+1) No se deja espacio entre el `while` y el `(`
+2) Se deja un espacio entre `(` y la condición del if
+3) Idem 2
+4) Se puso un `else` en una nueva linea, en vez de a continuación del `}` que lo precede.
+5) Idem 4
+6) No se deja espacio entre el `if` y el `(`
+7) Se deja un espacio entre la última palabra de la linea y el `;`
+8) Se utiliza `strcpy` en vez de `snprintf`, cuando esta última permite delimitar la capacidad del buffer.
+9) Idem 4
+10) Idem 4
+11) Se supera la longitud máxima de linea recomendada de 80 caracteres.
+
+### b) Errores de generación del ejecutable
+Se reciben también los siguientes errores:  
+![Errores de Generación del Ejecutable](img/paso_1/errores_de_generacion.png)  
+Todos se tratan de errores de *compilación* debidos a la no inclusión del archivo `paso1_wordscounter.h`:
+- El primero se da porque no está definido el struct wordscounter_t
+- Los otros 4 se dan porque no están declaradas las funciones `wordscounter_create`, `wordscounter_process`, `wordscounter_get_words` y `wordscounter_destroy`
+  
+### c) Warnings
+En realidad, los últimos 4 errores del ítem anterior son warnings, pero como compilamos con el flag `-Werror`, entonces todos los Warnings son interpretados como errores.
+
