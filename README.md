@@ -178,3 +178,37 @@ Se compila y se ejecutan las pruebas requeridas de forma local, obteniendo los s
 ![Pruebas Locales](img/paso_6/pruebas_locales.png)  
 Como se observa, todos los resultados son los esperados.
 
+# Paso 8
+
+### a) Netcat flags
+- `-l`: Para ejecutar netcat en modo *listen* (por defecto es *client*). Se queda "escuchando"
+- `-p`: Para indicar en qué puerto local debe trabajar
+  
+### b) ss
+Se ejecuta el comando `ss -tuplan` y se obtiene: 
+![ss](img/paso_8/ss.png)  
+Con la linea que hace referencia al netcat en espera subrayada en rojo.
+
+### c) Comunicación Netcat
+Al escribir frases en la tercer consola (Donde se ejecutó `nc 127.0.0.1 9081`) y apretar `Enter`, se observa que en la primer consola (Donde se ejecutó `nc -l -p 9081`) aparecen las mismas frases, un instante después.
+
+### d) ss parte 2
+Al ejecutar de nuevo el comando `ss -tuplan`, seobserva lo siguiente:  
+![ss 2](img/paso_8/ss_2.png)  
+Todas las lineas hacen ahora referencia a netcats, aunque pareciera que la primera y la segunda corresponden al primero ( Con estado *LISTEN* y *ESTAB*), y la tercera al segundo (con estado *ESTAB*)
+
+### e) Tiburoncin
+En la consola en la que corre *tiburoncin* se puede observar la cantidad de bytes enviados desde un *netcat* a otro, y además, lo que parece ser un `hexdump` del mensaje en cuestión.
+Se dice que *tiburoncin* es un *man in the middle* porque hace de intermediario en la comunicación del proceso A al proceso B capturando (y registrando) cada uno de los mensajes del cliente antes de dirigirlos al destinatario.
+
+### f) Tiburoncin parte 2
+Se muestra el contenido de uno de los archivos `.dump` que generó tiburoncin: 
+- con `cat AtoB.dump` :  
+  ```
+  486f6c610a4d756e646f0a
+  ```
+- con `xxd -p -c 16 -r AtoB.dump | hexdump -C` : 
+  ```
+  00000000  48 6f 6c 61 0a 4d 75 6e  64 6f 0a                 |Hola.Mundo.|
+  0000000b
+  ```
