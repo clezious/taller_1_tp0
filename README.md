@@ -104,3 +104,26 @@ Los nuevos errores de generación del ejecutable son los siguientes:
 Aunque en este caso el error es uno solo, y se da porque la función declarada en `paso3_wordscounter.h`:  
 `void wordscounter_destroy(wordscounter_t *self);`  
 no fué definida nunca, y es utilizada en `paso3_main.c`, por lo que, esta vez, se trata de un error del *linker*.
+
+# Paso 4
+
+### a) Correcciones
+Se define en `paso4_wordscounter.c` la función `wordscounter_destroy`, pero no hace nada.
+
+### b) Valgrind Tda
+Los mensajes de error recibidos del caso de prueba Tda con valgrind fueron:  
+![Valgrind TDA](img/paso_4/valgrind_tda.png)  
+En este caso, el error principal es que se realiza un `fopen()` en `paso4_main.c` para abrir el archivo, pero nunca se cierra con `fclose()`. Luego, hay una perdida de memoria por hacer un `malloc()` sin su correspondiente `free()` en `paso4_wordscounter.c`.
+
+### c) Valgrind Long Filename
+Los mensajes de error recibidos del caso de prueba Long Filename con valgrind fueron:  
+![Valgrind Long Filename](img/paso_4/valgrind_long_filename.png)  
+En este caso, el error es un `Buffer Overflow` en `paso4_main.c` en la llamada a la función `memcpy`, que hace que finalice la ejecución del programa.
+
+### d) memcpy() o strncpy()
+El problema del `memcpy()` en este caso no se solucionaría simplemente usando `strncpy()`, porque realmente el inconveniente está en querer copiar la totalidad del buffer de origen en el buffer de destino, en vez de limitarlo al tamaño del buffer de destino.
+
+### e) Segmentation Fault y Buffer Overflow
+- **Segmentation Fault**: Se da cuando se intenta acceder a direcciones de memoria a las que no se tiene acceso, o se intenta escribir en direcciones de memoria de solo lectura.
+- **Buffer Overflow¨**: Se da cuando se intenta asignar a un buffer de memoria una cantidad de datos mayor que el tamaño del buffer, sobreescribiendo los datos adyacentes que pueda haber.
+
