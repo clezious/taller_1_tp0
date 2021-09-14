@@ -127,3 +127,36 @@ El problema del `memcpy()` en este caso no se solucionaría simplemente usando `
 - **Segmentation Fault**: Se da cuando se intenta acceder a direcciones de memoria a las que no se tiene acceso, o se intenta escribir en direcciones de memoria de solo lectura.
 - **Buffer Overflow¨**: Se da cuando se intenta asignar a un buffer de memoria una cantidad de datos mayor que el tamaño del buffer, sobreescribiendo los datos adyacentes que pueda haber.
 
+# Paso 5
+
+### a) Correcciones
+- Para resolver el problema del archivo que no se cerraba, se agregó el `fclose()` faltante.
+- Para el problema del *Buffer Overflow*, se simplifica directamente abriendo `argv[1]` en vez de volcar su contenido en la variable `filepath` como intermediario.
+- Para el problema de la perdida de memoria por el `malloc()` no liberado, se simplifica guardando los caracteres delimitadores en una constante, evitando directamente el `malloc`.
+
+### b) Fallas Invalid File y Single Word
+La salida de los casos de prueba del *Sercom* resultan:  
+![Casos de Prueba](img/paso_5/casos_prueba.png)  
+Donde se puede observar que el error en *archivo_invalido* está en el `__return_code__` , que es 255 en vez de 1, y el error en *una_palabra* está en el `__stdout__`, que debería ser 1, pero es 0.  
+Estos errores se deben a que:
+- **Invalid File**: Falla porque el mensaje de error se define como -1 en vez de 1 (lo que se espera). Finalmente como la salida que espera el SO es del tipo `uint8_t`, se interpreta al -1 como `256 - 1 = 255`.
+- **Single Word**: Falla porque el último carácter del archivo `input_single_word.txt` no se encuentra entre los carácteres marcados como delimitadores en el código, por lo que no se detecta ninguna palabra, y se devuelve 0 en vez de 1.
+  
+### c) hexdump
+Al ejecutar el comando `hexdump` o `hd` sobre el archivo `input_single_word.txt` se obtiene lo siguiente:  
+![Hexdump input_single_word.txt](img/paso_5/hexdump.png)  
+Donde se observa que el último carácter del archivo es `64` en hexadecimal, es decir, la letra `d`.
+
+### d) gdb
+Se ejecuta `gdb` y los comandos indicados, obteniendo:  
+![gdb_1](img/paso_5/gdb_1.png)  
+![gdb_2](img/paso_5/gdb_2.png)  
+Y los comandos utilizados, en orden de ejecución resultan:  
+- `gdb ./tp` : Para iniciar `gdb` sobre el programa `tp`
+- `info functions` : Para mostrar información sobre todas las funciones encontradas en el programa
+- `list wordscounter_next_state` + `list` : Para mostrar la definición entera de la función `wordscounter_next_state` junto con los numeros de linea de cada linea que la compone en el programa.
+- `break 45` : Para crear un *breakpoint* en la linea 45 del programa
+- `run input_single_word.txt` : Para ejecutar el programa con `input_single_word.txt` como parámetro
+- `quit` : para salir de `gdb`
+
+La razón por la cual no se detiene la ejecución en el *breakpoint* creado en la linea 45 al ejecutar el comando `run input_single_word.txt` es que el programa no entra en la condición del *if* de la linea anterior, porque el caracter `d` no se encuentra en la lista de delimitadores definidos, que es justamente el motivo por el cual esta prueba falla.
