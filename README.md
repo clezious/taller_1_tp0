@@ -125,14 +125,14 @@ El problema del `memcpy()` en este caso no se solucionaría simplemente usando `
 
 ### e) Segmentation Fault y Buffer Overflow
 - **Segmentation Fault**: Se da cuando se intenta acceder a direcciones de memoria a las que no se tiene acceso, o se intenta escribir en direcciones de memoria de solo lectura.
-- **Buffer Overflow¨**: Se da cuando se intenta asignar a un buffer de memoria una cantidad de datos mayor que el tamaño del buffer, sobreescribiendo los datos adyacentes que pueda haber.
+- **Buffer Overflow**: Se da cuando se intenta asignar a un buffer de memoria una cantidad de datos mayor que el tamaño del buffer, sobreescribiendo los datos adyacentes que pueda haber.
 
 # Paso 5
 
 ### a) Correcciones
 - Para resolver el problema del archivo que no se cerraba, se agregó el `fclose()` faltante.
 - Para el problema del *Buffer Overflow*, se simplifica directamente abriendo `argv[1]` en vez de volcar su contenido en la variable `filepath` como intermediario.
-- Para el problema de la perdida de memoria por el `malloc()` no liberado, se simplifica guardando los caracteres delimitadores en una constante, evitando directamente el `malloc`.
+- Para el problema de la perdida de memoria por el `malloc()` no liberado, se simplifica guardando los caracteres delimitadores en una variable estática, evitando directamente el `malloc`.
 
 ### b) Fallas Invalid File y Single Word
 La salida de los casos de prueba del *Sercom* resultan:  
@@ -160,3 +160,21 @@ Y los comandos utilizados, en orden de ejecución resultan:
 - `quit` : para salir de `gdb`
 
 La razón por la cual no se detiene la ejecución en el *breakpoint* creado en la linea 45 al ejecutar el comando `run input_single_word.txt` es que el programa no entra en la condición del *if* de la linea anterior, porque el caracter `d` no se encuentra en la lista de delimitadores definidos, que es justamente el motivo por el cual esta prueba falla.
+
+# Paso 6
+
+### a) Correcciones
+- Se cambia el código de error `-1` por `1` en `paso6_main.c`
+- Se cambia la variable estática `delim_words` con los posibles delimitadores de palabras por la constante `DELIM_WORDS` (y se reemplazan todas las apariciones por el nuevo nombre) en el archivo `paso6_wordscounter.c`
+- Se agrega la condición de que si se alcanza el `EOF` (*End of File*) mientras se está recorriendo una palabra en la función `wordscounter_next_state()`, entonces se suma una palabra al contador de palabras y se declara al siguiente estado como finalizado, en el archivo `paso6_wordscounter.c`
+Estas correcciones logran resolver los errores encontrados en el paso anterior.
+
+### b) Entregas realizadas
+Listado de entregas realizadas en Sercom:  
+![Entregas realizadas](img/paso_6/entregas_realizadas.png)
+
+### c) Pruebas Locales
+Se compila y se ejecutan las pruebas requeridas de forma local, obteniendo los siguientes resultados:  
+![Pruebas Locales](img/paso_6/pruebas_locales.png)  
+Como se observa, todos los resultados son los esperados.
+
