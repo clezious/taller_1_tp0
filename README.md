@@ -91,3 +91,16 @@ Por otra parte, hay nuevos errores de generación del ejecutable:
 Nuevamente se tratan de errores de compilación por falta de definicionesn aunque esta vez en los archivos `paso2_wordscounter.c` y `paso2_wordscounter.h`, 
 que en este caso se solucionarían incluyendo los headers `stddef.h`, `stdio.h` y `stdlib.h` en los archivos correspondientes 
 (tal como se explica detalladamente en los errores de compilación obtenidos)
+
+# Paso 3
+
+### a) Correcciones
+Se agregan los *include* a los headers mencionados en los errores del paso anterior, con la excepción de `stddef.h` que se reemplaza 
+por `string.h`, pero sirve igual porque contiene la definición de `size_t`, que es lo que generaba el error.
+
+### b) Errores de generación del ejecutable
+Los nuevos errores de generación del ejecutable son los siguientes:   
+![Errores de generación](img/paso_3/errores_de_generacion.png)  
+Aunque en este caso el error es uno solo, y se da porque la función declarada en `paso3_wordscounter.h`:  
+`void wordscounter_destroy(wordscounter_t *self);`  
+no fué definida nunca, y es utilizada en `paso3_main.c`, por lo que, esta vez, se trata de un error del *linker*.
