@@ -1,5 +1,5 @@
 # Paso 0
-
+<!-- poner nombre y padron -->
 ### a) Capturas de pantalla de la ejecución del aplicativo
 - Ejecución sin Valgrind: <br><br> 
   ![Ejecución sin Valgrind](img/paso_0/sin_valgrind.png)  
@@ -11,7 +11,7 @@ Es particularmente útil para detectar errores de memoria (con la herramienta me
 Entre las opciones más comunes se encuentran: `--tool`, con la que se elige entre las herramientas que ofrece el programa (Por defecto Memcheck), `--leak-check`, con la que se habilita o deshabilita el análisis detallado de las perdidas de memoria, y `--verbose` con la que se pide que el output contenga información más detallada que la que se ofrece por defecto. 
 ### c) sizeof()
 `sizeof()` es una función que devuelve el tamaño en bytes de una variable o tipo de dato recibido como parámetro en la arquitectura y compilador utilizados.  
-El valor de salida de `sizeof(char)` es 1 y el de `sizeof(int)` dependerá de la arquitectura y compilador utilizados (En mi caso, es de 4 bytes).
+El valor de salida de `sizeof(char)` es 1 y el de `sizeof(int)` dependerá de la arquitectura y compilador utilizados (En mi caso, es de 4 bytes). <!-- sizeof() no es una funcion, es un operador -->
 ### d) sizeof(struct)
 El *sizeof()* de un *struct* de c no es necesariamente igual a la suma de los *sizeof()* de cada uno de sus elementos. Esto se debe a que el compilador puede alinear los elementos en direcciones de memoria múltiplos de 4 para hacer que su acceso sea más rapido, a coste de utilizar más memoria.
 Un ejemplo de este comportamiento se observa en el siguiente programa:
@@ -38,6 +38,7 @@ cuya salida al ejecutarlo resulta:
   sizeof() int + char : 5
 ```
 comprobando el comportamiento anteriormente mencionado.
+<!-- el padding no alinea en multiplos de 4, probar el struct con un short y un char. https://taller-de-programacion.github.io/blog/2021/04/24/Sizeof.html  -->
 ### e) Archivos estándar
 STDIN, STDOUT y STDERR son los canales de comunicación estandar al que tienen acceso los programas.
 - STDIN es utilizado para la entrada de datos al programa
@@ -46,6 +47,7 @@ STDIN, STDOUT y STDERR son los canales de comunicación estandar al que tienen a
 
 Mediante el uso de los caracteres `>` y `<` puede *redirigirse* la salida de un programa hacia un archivo (`programa > archivo`), o la entrada de un programa desde un archivo (`programa < archivo`).  
 Por otra parte, el caracter *pipe* `|` permite conectar la salida de un proceso directamente con la entrada de otro, sin recurrir a archivos intermedios. Por ejemplo: `programa1 | programa2` ejecutará y conectará la salida del `programa1` a la entrada del `programa2` y ejecutará este último.
+<!-- y como redirecciono STDERR? -->
 
 # Paso 1
 
@@ -91,7 +93,10 @@ Por otra parte, hay nuevos errores de generación del ejecutable:
 Nuevamente se tratan de errores de compilación por falta de definicionesn aunque esta vez en los archivos `paso2_wordscounter.c` y `paso2_wordscounter.h`, 
 que en este caso se solucionarían incluyendo los headers `stddef.h`, `stdio.h` y `stdlib.h` en los archivos correspondientes 
 (tal como se explica detalladamente en los errores de compilación obtenidos)
-
+<!-- falta de DECLARACIONES, no definiciones -->
+<!-- size_t wordscounter_get_words(wordscounter_t *self) en este caso que paso? -->
+  <!-- También se habla de la declaración built-in de malloc, que devuelve int en vez de void* -->
+  <!-- Explicar todos los errores, no son todos iguales -->
 # Paso 3
 
 ### a) Correcciones
